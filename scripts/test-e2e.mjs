@@ -9,6 +9,17 @@ const page = await context.newPage()
 const base = process.env.TEST_URL || 'http://127.0.0.1:4173'
 const errors = []
 page.on('pageerror', error => errors.push(error.message))
+page.on('console', message => {
+  if (message.type() === 'error' && message.text().includes('Encountered two children with the same key')) errors.push(message.text())
+})
+const assertCaseStudy = async title => {
+  await page.getByRole('region', { name: title, exact: true }).waitFor()
+  assert.equal(await page.locator('#case-study > .project-image').count(), 1, `${title} must show exactly one artwork panel`)
+  assert.equal(await page.locator('#case-study > .case-content').count(), 1, `${title} must show exactly one details panel`)
+  assert.equal(await page.locator('#case-title').textContent(), title)
+  assert.equal(await page.locator('.project-card.is-selected h3').textContent(), title)
+  assert.equal(await page.locator('.project-view[aria-expanded="true"]').count(), 1)
+}
 await mkdir('.artifacts', { recursive: true })
 try {
   for (const width of [360, 768, 1024, 1440]) {
@@ -45,9 +56,11 @@ try {
   const headerPosition = await page.locator('header').boundingBox()
   assert(panelPosition.y >= headerPosition.height, 'Sticky header obscures the case study')
   await page.getByRole('button', { name: 'Previous project', exact: true }).click()
-  await page.getByRole('region', { name: 'KiX Dream Soccer', exact: true }).waitFor()
+  await assertCaseStudy('KiX Dream Soccer')
+  assert.equal(await page.locator('#case-study .is-placeholder').count(), 1, 'Projects without artwork must show their placeholder')
   await page.getByRole('button', { name: 'Next project', exact: true }).click()
-  await page.getByRole('region', { name: 'Viewfinder', exact: true }).waitFor()
+  await assertCaseStudy('Viewfinder')
+  assert.equal(await page.locator('#case-study .is-placeholder').count(), 0, 'Switching back must restore the project artwork')
   await page.keyboard.press('Escape')
   assert.equal(await page.locator('#case-study').count(), 0)
   assert.equal(await page.locator('.project-card button:focus').count(), 1, 'Closing should restore card focus')
@@ -59,10 +72,41 @@ try {
   await page.getByRole('button', { name: 'View Video Slot Portfolio case study', exact: true }).click()
   await page.getByRole('button', { name: 'Next project', exact: true }).click()
   assert.equal(await page.locator('#case-title').textContent(), 'Video Slot Portfolio', 'One-project filter must cycle safely')
+  await assertCaseStudy('Video Slot Portfolio')
   await page.getByRole('button', { name: 'All, 10 projects', exact: true }).click()
   assert.equal(await page.locator('#case-study').count(), 0)
 
   console.log('Project filters, case navigation, keyboard controls, and focus restoration passed.')
+  for (const { width, reducedMotion } of [{ width: 360, reducedMotion: 'no-preference' }, { width: 1440, reducedMotion: 'reduce' }]) {
+    await page.setViewportSize({ width, height: 1000 })
+    await page.emulateMedia({ reducedMotion })
+    const titles = await page.locator('.project-card h3').allTextContents()
+    await page.getByRole('button', { name: `View ${titles[0]} case study`, exact: true }).click()
+    await assertCaseStudy(titles[0])
+    for (const direction of [1, -1]) {
+      for (let step = 1; step <= titles.length * 2; step++) {
+        await page.getByRole('button', { name: direction === 1 ? 'Next project' : 'Previous project', exact: true }).click()
+        await assertCaseStudy(titles[(direction * step % titles.length + titles.length) % titles.length])
+      }
+    }
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await page.getByRole('button', { name: 'Close case study', exact: true }).click()
+      assert.equal(await page.locator('#case-study').count(), 0)
+      await page.keyboard.press('Enter')
+      await assertCaseStudy(titles[0])
+    }
+    await page.getByRole('button', { name: `View ${titles[1]} case study`, exact: true }).click()
+    await assertCaseStudy(titles[1])
+    await page.locator('.project-card.is-selected .project-view').click()
+    assert.equal(await page.locator('#case-study').count(), 0)
+    await page.keyboard.press('Enter')
+    await assertCaseStudy(titles[1])
+    await page.getByRole('button', { name: 'Personal projects, 2 projects', exact: true }).click()
+    assert.equal(await page.locator('#case-study').count(), 0, 'Changing filters must close the open case study')
+    await page.getByRole('button', { name: 'All, 10 projects', exact: true }).click()
+  }
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  console.log('Repeated case-study opening, closing, switching, and wraparound passed on mobile and desktop.')
   const slider = page.getByRole('slider')
   await slider.focus()
   assert((await slider.getAttribute('aria-valuetext')).includes('OCT 2022'))

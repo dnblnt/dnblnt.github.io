@@ -50,8 +50,8 @@ export default function Work() {
       <span className="work-count label" aria-live="polite">{String(visible.length).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
     </div>
     {project && <div id="case-study" className="case-study" ref={panelRef} tabIndex={-1} role="region" aria-labelledby="case-title">
-      <ProjectImage key={project.slug} project={project} large />
-      <div className="case-content" key={project.slug}>
+      <ProjectImage key={`image-${project.slug}`} project={project} large />
+      <div className="case-content" key={`content-${project.slug}`}>
         <div className="case-toolbar">
           <span className="label">{ui.caseStudy} / P/{String(number).padStart(2, '0')}</span>
           <div className="case-controls">
