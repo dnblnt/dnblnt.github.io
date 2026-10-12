@@ -1,0 +1,10 @@
+.git/
+.github/
+.openai/
+.agents/
+.codex/
+.artifacts/
+.sites-runtime/
+node_modules/
+dist/
+*.tsbuildinfo

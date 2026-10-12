@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "viewfinder",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1382070/a69eb56f73446624325dec8a4fe74dc4ae09fb96/header.jpg?t=1764842475",
+    "store": "https://store.steampowered.com/app/1382070/"
+  },
+  {
+    "slug": "shots-fired",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/650120/capsule_616x353.jpg",
+    "store": "https://store.steampowered.com/app/650120/"
+  },
+  {
+    "slug": "goblin-stone",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1521970/capsule_616x353.jpg",
+    "store": "https://store.steampowered.com/app/1521970/"
+  },
+  {
+    "slug": "political-animals",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/458630/capsule_616x353.jpg",
+    "store": "https://store.steampowered.com/app/458630/"
+  },
+  {
+    "slug": "academia",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/672630/capsule_616x353.jpg",
+    "store": "https://store.steampowered.com/app/672630/"
+  },
+  {
+    "slug": "wild-season",
+    "source": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/328220/capsule_616x353.jpg",
+    "store": "https://store.steampowered.com/app/328220/"
+  },
+  {
+    "slug": "rival-ph",
+    "source": "https://rmsqqrpcxlcabcwtlgyj.supabase.co/storage/v1/object/public/sm/rival-wordmark-dark.png",
+    "store": "https://rival.ph"
+  },
+  {
+    "slug": "room-riot",
+    "source": "https://roomriot.app/assets/brand/room-riot-social-preview.png",
+    "store": "https://roomriot.app"
+  }
+]
