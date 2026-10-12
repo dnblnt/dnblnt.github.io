@@ -20,6 +20,7 @@ export default function Timeline() {
   const end = monthIndex(timeline.end)
   const now = Math.min(currentMonth(), end - 1)
   const range = end - start
+  const laneCount = Math.max(1, ...career.map(role => role.lane + 1))
   const [cursor, setCursor] = useState(Math.min(monthIndex(timeline.initial), now))
   const [playing, setPlaying] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -81,7 +82,7 @@ export default function Timeline() {
       }}><span aria-hidden="true">{playing ? '❚❚' : '▶'}</span>{playing ? timeline.pause : timeline.play}</button>
     </div>
     <div className="timeline-scroll" ref={scrollRef}>
-      <div className="timeline-track" ref={trackRef} role="slider" tabIndex={0} aria-label={timeline.accessibleLabel} aria-valuemin={start} aria-valuemax={now} aria-valuenow={cursor} aria-valuetext={`${label}, ${active.length} active roles`} onKeyDown={handleKey}
+      <div className="timeline-track" ref={trackRef} style={{ height: 85 + laneCount * 58 }} role="slider" tabIndex={0} aria-label={timeline.accessibleLabel} aria-valuemin={start} aria-valuemax={now} aria-valuenow={cursor} aria-valuetext={`${label}, ${active.length} active roles`} onKeyDown={handleKey}
         onPointerDown={event => {
           if (event.button !== 0) return
           setPlaying(false)
@@ -93,7 +94,7 @@ export default function Timeline() {
         onPointerUp={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId) }}
         onPointerCancel={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId) }}>
         {Array.from({ length: range / 12 }, (_, index) => <div className="year-tick" key={index} style={{ left: `${position(start + index * 12)}%` }} aria-hidden="true"><span>’{String(Math.floor(start / 12) + index).slice(-2)}</span></div>)}
-        {[0, 1, 2].map(lane => <div className="lane-guide" key={lane} style={{ top: `${67 + lane * 58}px` }} aria-hidden="true" />)}
+        {Array.from({ length: laneCount }, (_, lane) => <div className="lane-guide" key={lane} style={{ top: `${67 + lane * 58}px` }} aria-hidden="true" />)}
         {career.map(role => {
           const roleStart = monthIndex(role.start)
           const roleEnd = Math.min(role.end ? monthIndex(role.end) + 1 : now + 1, end)
@@ -108,7 +109,7 @@ export default function Timeline() {
     <div className="timeline-readout" aria-live={playing ? 'off' : 'polite'} aria-atomic="true"><h3>{label}</h3><span className="label"><span className="status-square" aria-hidden="true" />{active.length} {timeline.activeRolesLabel}</span></div>
     <div className="career-details cell-grid">
       {active.length ? active.map(role => <article className="career-detail" key={role.id}>
-        <div className="career-meta label"><span>{dateLabel(monthIndex(role.start))} → {role.end ? dateLabel(monthIndex(role.end)) : timeline.nowLabel}</span><span>{role.location}</span></div>
+        <div className="career-meta label"><span>{role.startLabel ?? dateLabel(monthIndex(role.start))} → {role.end ? dateLabel(monthIndex(role.end)) : timeline.nowLabel}</span><span>{role.location}</span></div>
         <h4>{role.studio}</h4><p className="career-role">{role.role}</p><p className="career-work">{role.work}</p>
         <ul className="detail-list">{role.bullets.map(bullet => <li key={bullet}>{bullet}</li>)}</ul>
       </article>) : <article className="career-detail"><h4>{timeline.emptyHeading}</h4><p>{timeline.emptyDescription}</p></article>}

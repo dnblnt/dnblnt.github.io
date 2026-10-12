@@ -22,6 +22,7 @@ export interface CareerRole {
   role: string
   location: string
   start: string
+  startLabel?: string
   end: string | null
   lane: number
   work: string
@@ -184,6 +185,7 @@ export const career: CareerRole[] = [
   { id: 'orc-chop', studio: 'Orc Chop Games', role: 'Lead Game Engineer', location: 'Manila', start: '2020-07', end: '2022-07', lane: 1, work: 'Goblin Stone', bullets: ['Jenkins CI/CD and game systems on an existing codebase.', 'Managed an external development team in Beijing.'] },
   { id: 'sad-owl', studio: 'Sad Owl Studios', role: 'Senior Unity Developer', location: 'UK (remote)', start: '2022-07', end: '2023-11', lane: 1, work: 'Viewfinder', bullets: ['Features and fixes on the BAFTA-winning puzzle game.', 'GitHub Actions, AWS and Slack CI/CD.', 'Led collaboration with third-party QA.'] },
   { id: 'play-n-go', studio: "Play'n GO", role: 'Frontend Developer', location: 'Manila', start: '2023-07', end: '2025-09', lane: 2, work: 'Video slot games', bullets: ['Built multiple video slots from the ground up.', 'Shipped browser games for web and mobile.'] },
+  { id: 'olisab', studio: 'olisab studio', role: 'Co-founder', location: 'Manila', start: '2025-01', startLabel: '2025', end: null, lane: 3, work: 'Rival.ph · Room Riot', bullets: ['Built Rival.ph with React and Supabase, deployed via GitHub Actions to Vercel.', 'Created Room Riot with Cloudflare Durable Objects, Firebase and PostHog.'] },
   { id: 'booming', studio: 'Booming Games', role: 'Senior HTML5 Game Developer', location: 'Malta (remote)', start: '2025-09', end: null, lane: 1, work: 'Video slot games', bullets: ['Currently shipping games on Pixi 8.', 'TypeScript and Pixi.js engineering for web and mobile.'] },
 ]
 

@@ -25,7 +25,7 @@ All portfolio content lives in `src/data.ts`:
 - `AVAILABLE`: set to `true` to show the freelance availability badge.
 - `navigation` and `services`: section headings and service descriptions.
 - `projects`: case-study content, studio, categories, awards, and technology chips. `years` is optional when dates are unavailable. `url` adds a visit link to the case study. The Personal projects filter includes Rival.ph and Room Riot under olisab studio; KiX Dream Soccer appears under KiX Games.
-- `career`: timeline roles; dates use `YYYY-MM`, and `end: null` means current. End months are inclusive. Lanes are 0–2.
+- `career`: timeline roles; dates use `YYYY-MM`, and `end: null` means current. End months are inclusive. Use `startLabel` when only the start year is known. Lanes are numbered from 0; the chart automatically adds rows to fit the highest lane number. olisab studio runs from 2025 to the present on its own lane.
 - `timeline`: chart range, initial cursor, date labels, and controls. Current month is calculated in Manila’s UTC+8 time zone.
 - `skillGroups` and `ui`: toolchain and interface labels.
 - `metadata`: page title, descriptions, production URL, and social preview image. The build derives meta tags and structured data from this file.
